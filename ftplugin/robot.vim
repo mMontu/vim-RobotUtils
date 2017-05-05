@@ -14,3 +14,7 @@ setlocal commentstring=#\ %s
 " from https://vi.stackexchange.com/a/7354/1405
 inoremap <buffer> <Tab> <Space><Space><Space><Space>
 
+" Set 'formatoptions' to break comment lines but not other lines,
+" and insert the comment leader when hitting <CR> or using "o".
+setlocal fo-=t fo+=croql
+
