@@ -1,0 +1,8 @@
+#############
+#  various  #
+#############
+tags
+*.swp
+.netrwhist
+/test
+
