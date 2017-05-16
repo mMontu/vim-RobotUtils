@@ -5,7 +5,7 @@
 
 " Only do this when not done yet for this buffer
 if exists("b:did_ftplugin")
-   finish
+  finish
 endif
 
 setlocal commentstring=#\ %s
@@ -18,9 +18,9 @@ inoremap <buffer> <Tab> <Space><Space><Space><Space>
 " and insert the comment leader when hitting <CR> or using "o".
 setlocal fo-=t fo+=croql
 
-nnoremap <buffer> <silent> <c-]>  :tag <C-R>=RobotUtils#getIdentifier()<CR><CR>
-nnoremap <buffer> <silent> <s-CR> :ptag <C-R>=RobotUtils#getIdentifier()<CR><CR>
-nnoremap <buffer> <silent> <c-CR> :sp \| tag <C-R>=RobotUtils#getIdentifier()<CR><CR>
+nnoremap <buffer> <silent> <c-]>  :call RobotUtils#tag('tag')<CR>
+nnoremap <buffer> <silent> <s-CR> :call RobotUtils#tag('ptag')<CR>
+nnoremap <buffer> <silent> <c-CR> :call RobotUtils#tag('sp \| tag')<CR>
 
 
 " vim:set et sw=2:
