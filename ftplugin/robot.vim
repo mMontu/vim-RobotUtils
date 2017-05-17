@@ -12,7 +12,11 @@ setlocal commentstring=#\ %s
 
 " expand Tab to four spaces, as it is recommended for the plain text format
 " from https://vi.stackexchange.com/a/7354/1405
-inoremap <buffer> <Tab> <Space><Space><Space><Space>
+if exists('*UltiSnips#ExpandSnippet')
+  inoremap <buffer> <silent> <Tab> <C-R>=RobotUtils#UltiExpandOrSpaces()<CR>
+else
+  inoremap <buffer> <Tab> <Space><Space><Space><Space>
+endif
 
 " Set 'formatoptions' to break comment lines but not other lines,
 " and insert the comment leader when hitting <CR> or using "o".

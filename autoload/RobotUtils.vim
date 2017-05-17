@@ -40,5 +40,16 @@ function! RobotUtils#tag(cmd) " {{{1
   echomsg 'tag not found: '.string(l:id)
 endfunction
 
+function! RobotUtils#UltiExpandOrSpaces() " {{{1
+  """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+  " Integration of the <Tab> to four spaces with the UltiSnips plugin
+  """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+  call UltiSnips#ExpandSnippet()
+  if g:ulti_expand_res
+    return ""
+  else
+    return "    "
+  endif
+endfunction
 
 " vim:set et sw=2 foldmethod=marker:
