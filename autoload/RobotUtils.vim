@@ -2,6 +2,12 @@
 " RobotUtils: Tools and utilities for Robot Framework
 "================================================================ 
 
+" Options {{{1
+if !exists("g:robot_utils_cache_dir")
+   let g:robot_utils_cache_dir = $HOME.'/.cache/vim-RobotUtils'
+endif
+
+
 function! RobotUtils#getIdentifiers() " {{{1
   """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
   " Returns a list of identifiers for the current cursor position. The first
@@ -23,6 +29,54 @@ function! RobotUtils#getIdentifiers() " {{{1
   endif
   " echom string(l:result)
   return l:result
+endfunction
+
+function! RobotUtils#packageTags() " {{{1
+  """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+  " Check for new or updated Robot packages in the system and prompt the user
+  " for tag creation
+  """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+  if executable('pip') != 1
+    return 'unable to find pip executable'
+  endif
+  if !s:checkDirectory(g:robot_utils_cache_dir)
+    return 'failed to create cache dir'
+  endif
+
+  " - filter and write pip list to pip_list
+  " - compare against the previous contents of the file
+  " - prompt the user
+  " - for each element
+  " -   retrieve the path
+  " -   append the element and its path in the pip_list file
+  " -   append the tags
+  "
+  " or just grep the package path for robot and selenium, because trying to
+  " understand the a user lib it became clear that it was necessary to have
+  " tags for Selenium, not only Selenium2Library. 
+  " - save the current python packages in a file
+  " - ctags for all packages
+  " - check for new packages and propose regenerate the tags
+
+  " on ftplugin: 
+  " - append this tag file in the &l:tags
+  " - check for g:robot_utils_system_tags; if it doesn't exist, call this
+  "   funciton and assign its return value to that variable
+
+  let pipShowRobot = systemlist('pip --disable-pip-version-check show robotframework')
+  """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+  "  NOTE: it seems that the packages used by current project are already    "
+  "  part of the repo, inside the env folder; thus this feature isn't
+  "  currently necessary.
+  "  It was enough to change ~/.git_template/hooks/ctags from
+  "  http://tbaggery.com/2011/08/08/effortless-ctags-with-git.html
+  "  , replacing `git ls-files | \` 
+  "  with `(git ls-files && git ls-files -o env) | \`
+  "  , which caused the untracked files inside `env` directory to be
+  "  considered when running ctags for the repo
+  """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+  
+
 endfunction
 
 function! RobotUtils#tag(cmd) " {{{1
@@ -50,6 +104,21 @@ function! RobotUtils#UltiExpandOrSpaces() " {{{1
   else
     return "    "
   endif
+endfunction
+
+function! s:checkDirectory(dir) " {{{1
+  """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+  " Return true if the given directory exists or was successfully created
+  """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+  if !isdirectory(a:dir)
+    if !exists('*mkdir') || !mkdir(a:dir, 'p')
+      echohl ErrorMsg
+      echomsg "RobotUtils plugin: unable to create directory: ".a:dir
+      echohl None
+      return 0
+    endif
+  endif
+  return 1
 endfunction
 
 " vim:set et sw=2 foldmethod=marker:
