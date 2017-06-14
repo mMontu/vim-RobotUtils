@@ -25,6 +25,7 @@ setlocal fo-=t fo+=croql
 nnoremap <buffer> <silent> <c-]>  :call RobotUtils#tag('tag')<CR>
 nnoremap <buffer> <silent> <s-CR> :call RobotUtils#tag('ptag')<CR>
 nnoremap <buffer> <silent> <c-CR> :call RobotUtils#tag('sp \| tag')<CR>
+nnoremap <buffer> <silent> <c-s-CR> :call RobotUtils#tag('vs \| tag')<CR>
 
 
 " vim:set et sw=2:
