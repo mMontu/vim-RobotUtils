@@ -84,14 +84,35 @@ function! RobotUtils#tag(cmd) " {{{1
   " Runs the command specified (tag or ptag) on the identifiers in the current
   " cursor position
   """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-  let l:id = RobotUtils#getIdentifiers()
-  for i in range(len(l:id))
-    if !empty(taglist('^'.l:id[i].'$'))
-      exe a:cmd.' '.l:id[i]
+  let l:idList = RobotUtils#getIdentifiers()
+  for i in range(len(l:idList))
+    if !empty(taglist('^'.l:idList[i].'$'))
+      exe a:cmd.' '.l:idList[i]
       return
     endif
+    """"""""""""""""""""""""""""""""""
+    "  check for embedded arguments  "
+    """"""""""""""""""""""""""""""""""
+    let l:idSplit = split(l:idList[i])
+    if len(l:idSplit) > 1
+      " select all tags that matches the first and last word and filter those
+      " that contains embedded arguments
+      let l:id = '^'.l:idSplit[0].'.*'.l:idSplit[len(l:idSplit)-1].'$'
+      let l:tags = filter(taglist(l:id), 'v:val.name =~ "\\${"')
+      " echo "test: ".l:id
+      " echo 'tags len: '.len(l:tags)
+      " echo l:tags
+      for j in range(len(l:tags))
+        " replace the embedded arguments with non-greedy `.*`
+        let l:tagRegex = substitute(l:tags[j].name, '\${.\{-}}', '.\\{-}', 'g')
+        if l:idList[i] =~ l:tagRegex
+          exe a:cmd.' '.l:tags[j].name 
+          return
+        endif
+      endfor
+    endif
   endfor
-  echomsg 'tag not found: '.string(l:id)
+  echomsg 'tag not found: '.string(l:idList)
 endfunction
 
 function! RobotUtils#UltiExpandOrSpaces() " {{{1
