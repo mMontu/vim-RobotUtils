@@ -97,9 +97,8 @@ function! RobotUtils#tag(cmd) " {{{1
     if len(l:idSplit) > 1
       " select all tags that matches the first and last word and filter those
       " that contains embedded arguments
-      let l:id = '^'.l:idSplit[0].'.*'.l:idSplit[len(l:idSplit)-1].'$'
-      let l:tags = filter(taglist(l:id), 'v:val.name =~ "\\${"')
-      " echo "test: ".l:id
+      let l:tags = filter(taglist('^'.l:idSplit[0]), 'v:val.name =~ "\\${"')
+      call extend (l:tags, filter(taglist(l:idSplit[len(l:idSplit)-1].'$'), 'v:val.name =~ "\\${"'))
       " echo 'tags len: '.len(l:tags)
       " echo l:tags
       for j in range(len(l:tags))
