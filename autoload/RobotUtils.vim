@@ -86,6 +86,7 @@ function! RobotUtils#tag(cmd) " {{{1
   """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
   let l:idList = RobotUtils#getIdentifiers()
   for i in range(len(l:idList))
+    " echo 'idList[i]: '.l:idList[i]
     if !empty(taglist('^'.l:idList[i].'$'))
       exe a:cmd.' '.l:idList[i]
       return
@@ -102,8 +103,11 @@ function! RobotUtils#tag(cmd) " {{{1
       " echo 'tags len: '.len(l:tags)
       " echo l:tags
       for j in range(len(l:tags))
-        " replace the embedded arguments with non-greedy `.*`
-        let l:tagRegex = substitute(l:tags[j].name, '\${.\{-}}', '.\\{-}', 'g')
+        " replace the embedded arguments with non-greedy `.*`; considers that
+        " then tags.name sometimes is truncated (leaving an unmatched brace)
+        " when the embedded argument regex is specified
+        let l:tagRegex = substitute(l:tags[j].name, '\${.\{-}\(}\|$\)', '.\\{-}', 'g')
+        " echo 'tag regex: '.l:tagRegex
         if l:idList[i] =~ l:tagRegex
           exe a:cmd.' '.l:tags[j].name 
           return
