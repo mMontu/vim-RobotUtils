@@ -12,7 +12,7 @@ setlocal commentstring=#%s
 
 " expand Tab to four spaces, as it is recommended for the plain text format
 " from https://vi.stackexchange.com/a/7354/1405
-if exists('*UltiSnips#ExpandSnippet')
+if exists('did_plugin_ultisnips')
   inoremap <buffer> <silent> <Tab> <C-R>=RobotUtils#UltiExpandOrSpaces()<CR>
 else
   inoremap <buffer> <Tab> <Space><Space><Space><Space>
