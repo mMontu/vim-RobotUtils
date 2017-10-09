@@ -109,7 +109,9 @@ function! RobotUtils#tag(cmd) " {{{1
         let l:tagRegex = substitute(l:tags[j].name, '\${.\{-}\(}\|$\)', '.\\{-}', 'g')
         " echo 'tag regex: '.l:tagRegex
         if l:idList[i] =~ l:tagRegex
-          exe a:cmd.' '.l:tags[j].name 
+          " echo 'l:idList[i]: '.l:idList[i]
+          " echo 'l:tags[j].name : '.l:tags[j].name 
+          exe a:cmd.' '.escape(l:tags[j].name, '|')
           return
         endif
       endfor
