@@ -106,7 +106,7 @@ function! RobotUtils#tag(cmd) " {{{1
         " replace the embedded arguments with non-greedy `.*`; considers that
         " then tags.name sometimes is truncated (leaving an unmatched brace)
         " when the embedded argument regex is specified
-        let l:tagRegex = substitute(l:tags[j].name, '\${.\{-}\(}\|$\)', '.\\{-}', 'g')
+        let l:tagRegex = '^'.substitute(l:tags[j].name, '\${.\{-}\(}\|$\)', '.\\{-}', 'g').'$'
         " echo 'tag regex: '.l:tagRegex
         if l:idList[i] =~ l:tagRegex
           " echo 'l:idList[i]: '.l:idList[i]
