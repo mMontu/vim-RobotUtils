@@ -23,7 +23,5 @@ then simply copy and paste:
     cd ~/.vim/bundle
     git clone https://github.com/mMontu/vim-RobotUtils.git
 
-Once help tags have been generated, you can view the manual with
-`:help LogNav`.
 
 
